@@ -2,8 +2,6 @@
 
 **Họ và tên:** NGUYỄN HỮU THẮNG  
 **MSV:** 2A202601435  
-**Dự án:** CI/CD for AI Systems - Wine Quality Classification  
-**Kho lưu trữ:** [K3-Track2-Day21-CI-CD-for-AI-Systems](https://github.com/huuthang-0809/K3-Track2-Day21-CI-CD-for-AI-Systems)  
 
 ---
 
