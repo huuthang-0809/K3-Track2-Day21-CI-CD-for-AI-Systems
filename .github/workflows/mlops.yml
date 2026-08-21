@@ -115,13 +115,29 @@ jobs:
     needs: eval
     runs-on: ubuntu-latest
     steps:
-      - name: SSH deploy to VM
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_SSH_KEY }}
-          script: |
-            sudo systemctl restart mlops-serve
-            sleep 5
-            curl -f http://localhost:8000/health || exit 1
+      - name: Deploy to VM via SSH
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_SSH_KEY: ${{ secrets.VM_SSH_KEY }}
+        run: |
+          host="${VM_HOST:-34.67.46.157}"
+          user="${VM_USER:-Admin}"
+
+          mkdir -p ~/.ssh
+          echo "$VM_SSH_KEY" > ~/.ssh/id_ed25519
+          if [ ! -s ~/.ssh/id_ed25519 ] || ! grep -q "BEGIN OPENSSH PRIVATE KEY" ~/.ssh/id_ed25519; then
+            cat << 'EOF' > ~/.ssh/id_ed25519
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACBbkvFTVytkHjIiO1qNgXzuRzi2zfu6T4/zPhOKrBDToAAAAJj98+Ja/fPi
+WgAAAAtzc2gtZWQyNTUxOQAAACBbkvFTVytkHjIiO1qNgXzuRzi2zfu6T4/zPhOKrBDToA
+AAAECsla1yPbzIHF+3Ab6IDa8/XMnpUfB+UjAWC61JKUjLzluS8VNXK2QeMiI7Wo2BfO5H
+OLbN+7pPj/M+E4qsENOgAAAAFWdpdGh1Yi1hY3Rpb25zLWRlcGxveQ==
+-----END OPENSSH PRIVATE KEY-----
+EOF
+          fi
+          chmod 600 ~/.ssh/id_ed25519
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 "${user}@${host}" "sudo systemctl restart mlops-serve && sleep 5 && curl -f http://localhost:8000/health"
+
