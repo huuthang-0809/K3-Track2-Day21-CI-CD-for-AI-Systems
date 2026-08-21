@@ -128,16 +128,17 @@ jobs:
           echo "$VM_SSH_KEY" > ~/.ssh/id_ed25519
           if [ ! -s ~/.ssh/id_ed25519 ] || ! grep -q "BEGIN OPENSSH PRIVATE KEY" ~/.ssh/id_ed25519; then
             cat << 'EOF' > ~/.ssh/id_ed25519
------BEGIN OPENSSH PRIVATE KEY-----
-b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-QyNTUxOQAAACBbkvFTVytkHjIiO1qNgXzuRzi2zfu6T4/zPhOKrBDToAAAAJj98+Ja/fPi
-WgAAAAtzc2gtZWQyNTUxOQAAACBbkvFTVytkHjIiO1qNgXzuRzi2zfu6T4/zPhOKrBDToA
-AAAECsla1yPbzIHF+3Ab6IDa8/XMnpUfB+UjAWC61JKUjLzluS8VNXK2QeMiI7Wo2BfO5H
-OLbN+7pPj/M+E4qsENOgAAAAFWdpdGh1Yi1hY3Rpb25zLWRlcGxveQ==
------END OPENSSH PRIVATE KEY-----
-EOF
+            -----BEGIN OPENSSH PRIVATE KEY-----
+            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+            QyNTUxOQAAACBbkvFTVytkHjIiO1qNgXzuRzi2zfu6T4/zPhOKrBDToAAAAJj98+Ja/fPi
+            WgAAAAtzc2gtZWQyNTUxOQAAACBbkvFTVytkHjIiO1qNgXzuRzi2zfu6T4/zPhOKrBDToA
+            AAAECsla1yPbzIHF+3Ab6IDa8/XMnpUfB+UjAWC61JKUjLzluS8VNXK2QeMiI7Wo2BfO5H
+            OLbN+7pPj/M+E4qsENOgAAAAFWdpdGh1Yi1hY3Rpb25zLWRlcGxveQ==
+            -----END OPENSSH PRIVATE KEY-----
+            EOF
           fi
           chmod 600 ~/.ssh/id_ed25519
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 "${user}@${host}" "sudo systemctl restart mlops-serve && sleep 5 && curl -f http://localhost:8000/health"
+
 
