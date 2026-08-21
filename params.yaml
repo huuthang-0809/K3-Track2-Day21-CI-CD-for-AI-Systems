@@ -1,5 +1,6 @@
-# Sieu tham so tot nhat cho mo hinh RandomForestClassifier
-n_estimators: 200
-max_depth: 18
+# Sieu tham so yeu de kiem thu Eval Gate
+n_estimators: 5
+max_depth: 2
 min_samples_split: 2
+
 
