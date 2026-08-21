@@ -128,7 +128,8 @@ jobs:
           host=$(echo "${VM_HOST}" | tr -d '\r\n" ' | xargs)
           user="${user:-Admin}"
           host="${host:-34.67.46.157}"
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 "${user}@${host}" "sudo systemctl restart mlops-serve && sleep 5 && curl -f http://localhost:8000/health"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 "${user}@${host}" 'sudo systemctl restart mlops-serve && for i in $(seq 1 10); do if curl -s http://localhost:8000/health | grep -q "ok"; then echo "Server is healthy!"; exit 0; fi; echo "Waiting for server... ($i/10)"; sleep 3; done; echo "Timeout waiting for server"; exit 1'
+
 
 
 
