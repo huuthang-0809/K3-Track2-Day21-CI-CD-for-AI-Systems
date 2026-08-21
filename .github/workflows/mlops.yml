@@ -124,7 +124,12 @@ jobs:
           mkdir -p ~/.ssh
           printf "%s\n" "$VM_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 "${VM_USER:-Admin}@${VM_HOST:-34.67.46.157}" "sudo systemctl restart mlops-serve && sleep 5 && curl -f http://localhost:8000/health"
+          user=$(echo "${VM_USER}" | tr -d '\r\n" ' | xargs)
+          host=$(echo "${VM_HOST}" | tr -d '\r\n" ' | xargs)
+          user="${user:-Admin}"
+          host="${host:-34.67.46.157}"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 "${user}@${host}" "sudo systemctl restart mlops-serve && sleep 5 && curl -f http://localhost:8000/health"
+
 
 
 
